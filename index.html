@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>College Login</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    height:100vh;
+    background:url("bg.jpg") no-repeat center center fixed;
+    background-size:cover;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,0.75);
+    z-index:-1;
+}
+
+.login-wrapper{
+    width:380px;
+    margin:110px auto;
+    position:relative;
+}
+
+.logo{
+    position:absolute;
+    top:-80px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#fff;
+    padding:8px;
+    border-radius:10px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
+
+.logo img{
+    width:150px;
+    height:150px;
+}
+
+.login-container{
+    background:linear-gradient(#2bb3b1,#e8f7f7);
+    padding:95px 25px 25px;
+    border-radius:12px;
+    box-shadow:0 0 12px rgba(0,0,0,0.3);
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:7px;
+    margin-top:4px;
+    border-radius:4px;
+    border:1px solid #777;
+}
+
+.captcha-box{
+    background:#a52a2a;
+    color:white;
+    font-size:22px;
+    letter-spacing:3px;
+    padding:10px;
+    margin:15px 0;
+    text-align:center;
+    cursor:pointer;
+}
+
+button{
+    margin-top:18px;
+    padding:8px 24px;
+    border-radius:4px;
+    border:1px solid #555;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#ddd;
+}
+</style>
+
+<script>
+let generatedCaptcha="";
+
+const students={
+"922524205085":{dob:"24-04-2007"},
+"922524205080":{dob:"18-05-2007"},
+"922524205117":{dob:"24-03-2006"},
+"922524205111":{dob:"25-10-2006"}
+};
+
+function generateCaptcha(){
+const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+generatedCaptcha="";
+for(let i=0;i<6;i++){
+generatedCaptcha+=chars[Math.floor(Math.random()*chars.length)];
+}
+document.getElementById("captchaText").innerText=generatedCaptcha;
+}
+
+function validateLogin(){
+const regNo=document.getElementById("regno").value.trim();
+const dob=document.getElementById("dob").value.trim();
+const userCaptcha=document.getElementById("captchaInput").value.trim();
+
+if(userCaptcha!==generatedCaptcha){
+alert("Invalid Captcha");
+generateCaptcha();
+return;
+}
+
+if(students[regNo] && students[regNo].dob===dob){
+window.location.href="result.html?reg="+regNo;
+}else{
+alert("Invalid Register Number or DOB");
+generateCaptcha();
+}
+}
+
+window.onload=generateCaptcha;
+</script>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+<div class="logo">
+<img src="logo.png">
+</div>
+
+<div class="login-container">
+
+<label>Register Number</label>
+<input type="text" id="regno">
+
+<label>Date of Birth</label>
+<input type="text" id="dob" placeholder="dd-mm-yyyy">
+
+<div class="captcha-box" id="captchaText" onclick="generateCaptcha()"></div>
+
+<label>Enter Captcha</label>
+<input type="text" id="captchaInput">
+
+<button onclick="validateLogin()">Submit</button>
+
+</div>
+</div>
+
+</body>
+</html>

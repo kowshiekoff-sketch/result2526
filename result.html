@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VSB Result Page</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#e6e6e6;}
+
+.header{
+background:#0e9aa7;color:white;padding:15px 20px;
+display:flex;justify-content:space-between;align-items:center;
+}
+
+.header-left{display:flex;align-items:center;gap:15px;}
+.header-left img{width: 140px;     /* Increased size */
+    height: 120px;}
+
+.header-right{text-align:right;font-size:14px;}
+.header-right img{width:60px;height:60px;border-radius:50%;margin-bottom:5px;}
+
+.container{display:flex;}
+
+.sidebar{
+width:230px;background:#128a8a;
+min-height:calc(100vh - 90px);padding-top:30px;
+}
+
+.sidebar a{
+display:block;padding:15px 20px;color:white;text-decoration:none;
+border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+.sidebar a:hover{background:#0e6f6f;}
+
+.content{flex:1;padding:25px;}
+
+.result-box{
+background:white;border-radius:6px;padding:15px;
+box-shadow:0 0 5px rgba(0,0,0,0.2);
+}
+
+.disclaimer{
+background:#f0f0f0;padding:10px;font-size:13px;margin-bottom:10px;
+}
+
+.result-title{
+background:#6f3fb3;color:white;padding:10px;text-align:center;
+font-weight:bold;font-size:15px;margin-bottom:10px;
+}
+
+table{width:100%;border-collapse:collapse;font-size:14px;}
+
+th,td{border:1px solid #cfcfcf;padding:8px;text-align:center;}
+
+th{background:#f2f2f2;}
+
+td:nth-child(3){text-align:left;}
+
+.sgpa{text-align:center;font-weight:bold;margin-top:15px;font-size:16px;}
+</style>
+
+<script>
+
+const students = {
+
+"922524205080":{
+name:"KAVIYA S",
+image:"Kaviya.jpg",
+sgpa:"7.63",
+subjects:[
+
+{sem:2,code:"23HST201",name:"PROFESSIONAL ENGLISH - II",credit:"2.00",result:"PASS",gr:"B",gp:"6.00"},
+{sem:2,code:"23MAT201",name:"COMPUTATIONAL METHODS",credit:"4.00",result:"PASS",gr:"B+",gp:"7.00"},
+{sem:2,code:"23PHT201",name:"PHYSICS FOR INFORMATION SCIENCE",credit:"3.00",result:"PASS",gr:"B",gp:"7.00"},
+{sem:2,code:"23EET202R",name:"BASIC ELECTRICAL & ELECTRONICS",credit:"3.00",result:"PASS",gr:"B",gp:"6.00"},
+{sem:2,code:"23GET201",name:"ENGINEERING GRAPHICS",credit:"4.00",result:"PASS",gr:"B",gp:"6.00"},
+{sem:2,code:"23GET202",name:"TAMILS AND TECHNOLOGY",credit:"1.00",result:"PASS",gr:"B+",gp:"7.00"},
+
+{sem:3,code:"23MAT302",name:"DISCRETE MATHEMATICS",credit:"4.00",result:"PASS",gr:"B",gp:"6.00"},
+{sem:3,code:"23CST301",name:"DIGITAL PRINCIPLES & CO",credit:"4.00",result:"PASS",gr:"B+",gp:"7.00"},
+{sem:3,code:"23CST302",name:"FOUNDATIONS OF DATA SCIENCE",credit:"3.00",result:"PASS",gr:"B",gp:"6.00"},
+{sem:3,code:"23ITT301",name:"DATA STRUCTURES & ALGORITHMS",credit:"3.00",result:"PASS",gr:"A",gp:"8.00"},
+{sem:3,code:"23CST304",name:"OBJECT ORIENTED PROGRAMMING",credit:"3.00",result:"PASS",gr:"B+",gp:"7.00"},
+{sem:3,code:"23ITP301",name:"DSA LAB",credit:"2.00",result:"PASS",gr:"A+",gp:"9.00"},
+{sem:3,code:"23CSP302",name:"OOP LAB",credit:"1.50",result:"PASS",gr:"A+",gp:"9.00"},
+{sem:3,code:"23CSP303",name:"DATA SCIENCE LAB",credit:"2.00",result:"PASS",gr:"A+",gp:"9.00"},
+{sem:3,code:"23GEP301",name:"PROFESSIONAL DEVELOPMENT",credit:"1.00",result:"PASS",gr:"O",gp:"10.00"}
+
+]
+},
+
+"922524205085":{
+name:"KOWSHIEK",
+image:"Kowshiek.jpg",
+sgpa:"8.20",
+subjects:[
+
+{sem:2,code:"23HST201",name:"PROFESSIONAL ENGLISH - II",credit:"2.00",result:"PASS",gr:"A",gp:"8.00"},
+{sem:2,code:"23MAT201",name:"COMPUTATIONAL METHODS",credit:"4.00",result:"PASS",gr:"A+",gp:"9.00"},
+{sem:2,code:"23PHT201",name:"PHYSICS FOR INFORMATION SCIENCE",credit:"3.00",result:"PASS",gr:"A",gp:"8.00"},
+{sem:2,code:"23EET202R",name:"BASIC ELECTRICAL & ELECTRONICS",credit:"3.00",result:"PASS",gr:"B+",gp:"7.00"},
+{sem:3,code:"23MAT302",name:"DISCRETE MATHEMATICS",credit:"4.00",result:"PASS",gr:"A",gp:"8.00"},
+{sem:3,code:"23CST301",name:"DIGITAL PRINCIPLES & CO",credit:"4.00",result:"PASS",gr:"A+",gp:"9.00"},
+{sem:3,code:"23ITT301",name:"DATA STRUCTURES & ALGORITHMS",credit:"3.00",result:"PASS",gr:"A",gp:"8.00"}
+
+]
+},
+
+"922524205117":{
+name:"POORVA",
+image:"Poorva.png",
+sgpa:"6.85",
+subjects:[
+
+{sem:2,code:"23HST201",name:"PROFESSIONAL ENGLISH - II",credit:"2.00",result:"PASS",gr:"C",gp:"5.00"},
+{sem:2,code:"23MAT201",name:"COMPUTATIONAL METHODS",credit:"4.00",result:"PASS",gr:"B",gp:"6.00"},
+{sem:3,code:"23MAT302",name:"DISCRETE MATHEMATICS",credit:"4.00",result:"PASS",gr:"B",gp:"6.00"},
+{sem:3,code:"23ITT301",name:"DATA STRUCTURES & ALGORITHMS",credit:"3.00",result:"PASS",gr:"B",gp:"6.00"}
+
+]
+}
+
+};
+
+function loadResult(){
+
+const params=new URLSearchParams(window.location.search);
+const reg=params.get("reg");
+
+if(!students[reg]){
+alert("Unauthorized Access");
+window.location.href="index.html";
+return;
+}
+
+const student=students[reg];
+
+document.getElementById("name").innerText=student.name;
+document.getElementById("roll").innerText=reg;
+document.getElementById("photo").src=student.image;
+document.getElementById("sgpa").innerText=student.sgpa;
+
+let rows="";
+student.subjects.forEach(sub=>{
+rows+=`
+<tr>
+<td>${sub.sem}</td>
+<td>${sub.code}</td>
+<td>${sub.name}</td>
+<td>${sub.credit}</td>
+<td>${sub.result}</td>
+<td>${sub.gr}</td>
+<td>${sub.gp}</td>
+</tr>
+`;
+});
+
+document.getElementById("resultBody").innerHTML=rows;
+
+}
+
+</script>
+</head>
+
+<body onload="loadResult()">
+
+<div class="header">
+<div class="header-left">
+<img src="logo.jpg">
+<div>
+<h2>V.S.B. ENGINEERING COLLEGE</h2>
+<p>(An Autonomous Institution)</p>
+<p>Approved by AICTE, Affiliated to Anna University, Chennai.</p>
+</div>
+</div>
+
+<div class="header-right">
+<img id="photo">
+<div>User : <span id="name"></span></div>
+<div>Roll No. : <span id="roll"></span></div>
+<div style="color:yellow;cursor:pointer;" onclick="window.location.href='index.html'">LOGOUT</div>
+</div>
+</div>
+
+<div class="container">
+<div class="sidebar">
+<a href="#">Student's Profile</a>
+<a href="#">Int. Assessments</a>
+<a href="#">End Sem Results</a>
+<a href="#">Exam Registration</a>
+<a href="#">Open Elective Reg.</a>
+</div>
+
+<div class="content">
+<div class="result-box">
+
+<div class="disclaimer">
+<b>Disclaimer :</b> The college is not responsible for any inadvertent error.
+</div>
+
+<div class="result-title">
+RESULTS OF THIRD SEMESTER : [2025 - ODD SEMESTER - END SEMESTER]
+</div>
+
+<table>
+<tr>
+<th>Sem</th>
+<th>Course Code</th>
+<th>Name of the Course</th>
+<th>Credit</th>
+<th>Result</th>
+<th>GR.</th>
+<th>G.P.</th>
+</tr>
+<tbody id="resultBody"></tbody>
+</table>
+
+<div class="sgpa">
+Semester Grade Point Average (SGPA) : <span id="sgpa"></span>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
